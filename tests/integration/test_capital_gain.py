@@ -1,10 +1,13 @@
+from decimal import Decimal
 import io
 import json
 import os
-import sys
 from unittest.mock import patch
 
 import pytest
+from src.adapters.input.json_parser import JsonParser
+from src.adapters.output.json_formatter import DecimalEncoder, JsonFormatter
+from src.domain.models.investimento import Investimento
 from src.main import main
 
 
@@ -177,3 +180,108 @@ def test_main_with_alternative_case_20():
         main()
 
     assert output_data.getvalue() == ('[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 0.0}]\n')
+
+
+def test_main_sem_entrada():
+    """Testa a função main quando não há entrada (para cobrir a linha 16)."""
+    input_data = "\n"  # Linha vazia para ativar a condição de saída
+    with patch("sys.stdin", io.StringIO(input_data)), patch("sys.stdout", io.StringIO()):
+        main()  # Deve terminar sem erros quando encontrar linha vazia
+
+
+def test_integracao_com_json_parser_invalido():
+    """Testa a integração com o parser de JSON quando o JSON é inválido (linhas 28-29)."""
+    input_data = "{invalid json"
+
+    with pytest.raises(Exception):
+        JsonParser.parse_operations(input_data)
+
+
+def test_metodos_investimento_integrado():
+    """Testa os métodos da classe Investimento de forma integrada (linhas 15, 25, 30, 46, 49)."""
+    # Cria um investimento e executa operações para cobrir todos os branches
+    investimento = Investimento()
+
+    # Teste para cobrir a linha 15 (propriedade quantidade)
+    assert investimento.quantidade == 0
+
+    # Teste para cobrir a linha 25 (propriedade valor_total)
+    assert investimento.valor_total == Decimal("0")
+
+    # Teste para cobrir a linha 30 (adicionar_acao com investimento vazio)
+    investimento.adicionar_acao(10, Decimal("10"))
+    assert investimento.quantidade == 10
+    assert investimento.preco_medio == Decimal("10")
+
+    # Teste para cobrir linhas 46 e 49 (remover_acao parcial e zerar o investimento)
+    investimento.remover_acao(5)  # Remove metade (linha 46 - remover parcial)
+    assert investimento.quantidade == 5
+
+    investimento.remover_acao(5)  # Remove o restante (linha 49 - zerar)
+    assert investimento.quantidade == 0
+    assert investimento.preco_medio == Decimal("0")
+
+
+def test_decimal_encoder_com_tipo_nao_suportado():
+    """Testa o comportamento do DecimalEncoder com tipos não suportados (linha 13)."""
+    encoder = DecimalEncoder()
+
+    # Testa o comportamento com outros tipos não suportados
+    class CustomClass:
+        pass
+
+    # Deve levantar TypeError quando não é possível serializar
+    with pytest.raises(TypeError):
+        encoder.default(CustomClass())
+
+
+def test_json_formatter_integrado():
+    """Testa o JsonFormatter de forma integrada."""
+    # Teste simples para garantir que o JsonFormatter está funcionando
+    impostos = [Decimal("0"), Decimal("100.50"), Decimal("0")]
+    resultado = JsonFormatter.formatar_impostos(impostos)
+
+    # Verifica se o resultado é um JSON válido
+    parsed = json.loads(resultado)
+    assert len(parsed) == 3
+    assert parsed[0]["tax"] == 0.0
+    assert parsed[1]["tax"] == 100.5
+    assert parsed[2]["tax"] == 0.0
+
+
+def test_investimento_adicionar_com_valor_zero():
+    """Testa adicionar ações com quantidade zero (para cobrir a linha 30 em investimento.py)."""
+    investimento = Investimento()
+
+    # Deve levantar ValueError ao tentar adicionar 0 ações
+    with pytest.raises(ValueError, match="Quantidade deve ser maior que zero"):
+        investimento.adicionar_acao(0, Decimal("10"))
+
+
+def test_investimento_remover_com_valor_zero():
+    """Testa remover ações com quantidade zero."""
+    investimento = Investimento()
+    investimento.adicionar_acao(10, Decimal("10"))
+
+    # Deve levantar ValueError ao tentar remover 0 ações
+    with pytest.raises(ValueError, match="Quantidade deve ser maior que zero"):
+        investimento.remover_acao(0)
+
+
+def test_investimento_remover_mais_do_que_possui():
+    """Testa remover mais ações do que possui."""
+    investimento = Investimento()
+    investimento.adicionar_acao(10, Decimal("10"))
+
+    # Deve levantar ValueError ao tentar remover mais ações do que possui
+    with pytest.raises(ValueError, match="Não é possível remover 20 ações"):
+        investimento.remover_acao(20)
+
+
+def test_main_com_erro_de_processamento():
+    """Testa a função main quando ocorre um erro no processamento (para cobrir as linhas 22-23)."""
+    input_data = '{"operação inválida": true}'
+
+    with patch("sys.stdin", io.StringIO(input_data)), patch("sys.stdout", io.StringIO()):
+        with pytest.raises(SystemExit):
+            main()  # Deve levantar SystemExit com a mensagem de erro
