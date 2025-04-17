@@ -20,4 +20,4 @@ class JsonFormatter:
     def formatar_impostos(impostos: List[Decimal]) -> str:
         """Formata lista de impostos como JSON."""
         result = [{"tax": imposto} for imposto in impostos]
-        return json.dumps(result, cls=DecimalEncoder)
+        return json.dumps(result, cls=DecimalEncoder, separators=(",", ": "))
