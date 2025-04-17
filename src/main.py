@@ -3,17 +3,13 @@
 Ponto de entrada principal da aplicação para o cálculo de ganho de capital.
 """
 
-from pathlib import Path
 import sys
 
-# Adiciona o diretório src ao PYTHONPATH
-src_path = str(Path(__file__).parent)
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
+from src.adapters.input.json_parser import JsonParser
+from src.adapters.output.json_formatter import JsonFormatter
+from src.domain.services.calcular_imposto_service import CalcularImpostoService
 
-from adapters.input.json_parser import JsonParser
-from adapters.output.json_formatter import JsonFormatter
-from domain.services.calcular_imposto_service import CalcularImpostoService
+# Adiciona o diretório src ao PYTHONPATH
 
 
 def main() -> None:
@@ -24,7 +20,7 @@ def main() -> None:
         try:
             operacoes = JsonParser.parse_operations(line)
             impostos = CalcularImpostoService().calcular_impostos(operacoes)
-            print(JsonFormatter.formatar_impostos(impostos))
+            print(JsonFormatter.formatar_impostos(impostos), end="")
         except Exception as exception:
             raise SystemExit(f"Erro ao processar entrada: {str(exception)}")
 

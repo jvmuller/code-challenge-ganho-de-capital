@@ -2,8 +2,8 @@ from decimal import Decimal
 import json
 from typing import List
 
-from domain.exceptions.parse_error import ParseError
-from domain.models.operacao import Operacao, TipoOperacao
+from src.domain.exceptions.parse_error import ParseError
+from src.domain.models.operacao import Operacao, TipoOperacao
 
 
 class JsonParser:

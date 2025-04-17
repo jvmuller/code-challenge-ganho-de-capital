@@ -1,8 +1,8 @@
 from decimal import Decimal
 from typing import List, Tuple
 
-from domain.models.investimento import Investimento
-from domain.models.operacao import Operacao, TipoOperacao
+from src.domain.models.investimento import Investimento
+from src.domain.models.operacao import Operacao, TipoOperacao
 
 
 class CalcularImpostoService:
