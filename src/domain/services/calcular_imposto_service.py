@@ -27,7 +27,7 @@ class CalcularImpostoService:
 
                 if lucro_ou_prejuizo < 0:
                     prejuizo_acumulado += abs(lucro_ou_prejuizo)
-                elif prejuizo_acumulado > 0 and lucro_ou_prejuizo > 0:
+                elif operacao.valor_total > self.LIMITE_ISENCAO_IMPOSTO and lucro_ou_prejuizo > 0:
                     prejuizo_acumulado = max(Decimal("0"), prejuizo_acumulado - lucro_ou_prejuizo)
 
                 investimento.remover_acao(operacao.quantidade)
