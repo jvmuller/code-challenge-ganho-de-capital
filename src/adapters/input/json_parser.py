@@ -13,6 +13,8 @@ class JsonParser:
     def parse_operations(json_data: str) -> List[Operacao]:
         """Análise o JSON e retorna uma lista de operações instanciadas no objeto Operacao."""
         try:
+            # Remove quebras de linha e espaços extras
+            json_data = json_data.strip().replace("\n", "").replace("  ", " ")
             data = json.loads(json_data)
 
             return [
