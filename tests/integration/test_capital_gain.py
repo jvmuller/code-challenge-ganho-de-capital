@@ -13,13 +13,33 @@ def load_input_file(filename):
         return json.loads(f.read())
 
 
-def test_main_with_input_01():
+@pytest.mark.parametrize(
+    "input_file,expected_output",
+    [
+        ("input_01.txt", '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0}]'),
+        ("input_02.txt", '[{"tax": 0.0},{"tax": 10000.0},{"tax": 0.0}]'),
+        # (
+        #     "input_01_with_02.txt",
+        #     '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0}][{"tax": 0.0},{"tax": 10000.0},{"tax": 0.0}]',
+        # ),
+        ("input_03.txt", '[{"tax": 0.0},{"tax": 0.0},{"tax": 1000.0}]'),
+        ("input_04.txt", '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0}]'),
+        ("input_05.txt", '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 10000.0}]'),
+        ("input_06.txt", '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 3000.0}]'),
+        (
+            "input_07.txt",
+            '[{"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 3000.0},{"tax": 0.0}, {"tax": 0.0}, {"tax": 3700.0}, {"tax": 0.0}]',
+        ),
+        ("input_08.txt", '[{"tax": 0.0},{"tax": 80000.0},{"tax": 0.0},{"tax": 60000.0}]'),
+        # ("input_09.txt", '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 0.0},{"tax": 1000.0},'), # TODO: Faltando valores no output
+    ],
+)
+def test_main_with_input(input_file, expected_output):
     """Testa o Caso #1 do exemplo de ganho de capital."""
-    input_data = load_input_file("input_01.txt")
+    input_data = load_input_file(input_file)
     output_data = io.StringIO()
 
     with patch("sys.stdin", io.StringIO(json.dumps(input_data))), patch("sys.stdout", output_data):
         main()
 
-    expected_output = '[{"tax": 0.0},{"tax": 0.0},{"tax": 0.0}]'
     assert output_data.getvalue() == expected_output
