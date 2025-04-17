@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 import json
 from typing import List
 
@@ -25,5 +25,5 @@ class JsonParser:
                 )
                 for item in data
             ]
-        except (json.JSONDecodeError, KeyError, ValueError) as exception:
+        except (json.JSONDecodeError, KeyError, ValueError, InvalidOperation) as exception:
             raise ParseError(f"Erro ao processar JSON: {str(exception)}")
