@@ -2,11 +2,24 @@
 
 Este projeto é uma solução para o Code Challenge sobre cálculo de ganho de capital, implementando um algoritmo que calcula o imposto a ser pago sobre lucros ou prejuízos de operações na bolsa de valores.
 
+## 📑 Sumário
+
+- [📋 Requisitos](#requisitos)
+- [🏗️ Decisões Técnicas e Arquiteturais](#decisoes-tecnicas)
+- [🛠️ Justificativa para Frameworks e Bibliotecas](#frameworks-bibliotecas)
+- [🚀 Como Executar o Projeto](#como-executar)
+- [🧪 Executando os Testes](#executando-testes)
+- [📝 Notas Adicionais](#notas-adicionais)
+
+<a id="requisitos"></a>
+
 ## 📋 Requisitos
 
 - 🐍 Python 3.13.2
 - 📦 Poetry 2.1.1
 - 🐳 Docker (opcional)
+
+<a id="decisoes-tecnicas"></a>
 
 ## 🏗️ Decisões Técnicas e Arquiteturais
 
@@ -126,12 +139,16 @@ A implementação segue princípios SOLID, com destaque para:
 
 Além disso, padrões como Injeção de Dependências e Separation of Concerns são aplicados consistentemente em todo o código.
 
+<a id="frameworks-bibliotecas"></a>
+
 ## 🛠️ Justificativa para Frameworks e Bibliotecas
 
 - 📦 **Poetry**: Gerenciamento de dependências e empacotamento mais moderno para Python
 - 🧪 **Pytest**: Framework de testes com sintaxe mais limpa e recursos avançados
 - 🎨 **Black**: Formatador de código para manter estilo consistente
 - 🔄 **isort**: Organização automática de imports
+
+<a id="como-executar"></a>
 
 ## 🚀 Como Executar o Projeto
 
@@ -176,6 +193,8 @@ python src/main.py < input_examples/input_01.txt
 # Salvando resultado em um arquivo
 python src/main.py < input_examples/input_01.txt > resultado.json
 ```
+
+<a id="executando-testes"></a>
 
 ## 🧪 Executando os Testes
 
@@ -251,6 +270,8 @@ Além dos casos de teste especificados no desafio, foram implementados **11 caso
 - Tratamento de erros em formatos inválidos
 
 Essa cobertura abrangente de testes garante que a solução funcione corretamente em todos os cenários possíveis.
+
+<a id="notas-adicionais"></a>
 
 ## 📝 Notas Adicionais
 
