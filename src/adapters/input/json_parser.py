@@ -4,9 +4,10 @@ from typing import List
 
 from src.domain.exceptions.parse_error import ParseError
 from src.domain.models.operacao import Operacao, TipoOperacao
+from src.domain.ports.input.operacoes_input_port import OperacoesInputPort
 
 
-class JsonParser:
+class JsonParser(OperacoesInputPort):
     """Classe responsável por converter strings JSON em listas de objetos Operacao."""
 
     @staticmethod

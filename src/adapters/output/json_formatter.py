@@ -2,6 +2,8 @@ from decimal import Decimal
 import json
 from typing import List
 
+from src.domain.ports.output.impostos_output_port import ImpostosOutputPort
+
 
 class DecimalEncoder(json.JSONEncoder):
     """Classe responsável por converter Decimal para float."""
@@ -13,7 +15,7 @@ class DecimalEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-class JsonFormatter:
+class JsonFormatter(ImpostosOutputPort):
     """Classe responsável por formatar listas de impostos como JSON."""
 
     @staticmethod

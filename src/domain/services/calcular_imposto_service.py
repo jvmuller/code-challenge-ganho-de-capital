@@ -1,5 +1,5 @@
 from decimal import Decimal
-from typing import List, Tuple
+from typing import List
 
 from src.domain.models.investimento import Investimento
 from src.domain.models.operacao import Operacao, TipoOperacao
