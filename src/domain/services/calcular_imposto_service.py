@@ -3,9 +3,10 @@ from typing import List
 
 from src.domain.models.investimento import Investimento
 from src.domain.models.operacao import Operacao, TipoOperacao
+from src.domain.ports.services.calcular_imposto_service_port import CalcularImpostoServicePort
 
 
-class CalcularImpostoService:
+class CalcularImpostoService(CalcularImpostoServicePort):
     """Serviço para calcular o imposto a ser pago sobre lucros ou prejuízos de operações no mercado financeiro."""
 
     ALIQUOTA_IMPOSTO = Decimal("0.20")
