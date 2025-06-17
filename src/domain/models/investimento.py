@@ -40,17 +40,20 @@ class Investimento:
             self._preco_medio = (valor_atual_total + valor_novo_total) / Decimal(quantidade_total)
             self._quantidade = quantidade_total
 
-    def remover_acao(self, quantidade: int) -> None:
+    def remover_acao(self, quantidade: int) -> None | dict:
         """Remove uma quantidade de ações do investimento e reseta o preço médio se todas as ações forem removidas."""
         if quantidade <= 0:
             raise ValueError("Quantidade deve ser maior que zero")
-
-        if quantidade > self._quantidade:
-            raise ValueError(
-                f"Não é possível remover {quantidade} ações. O investimento possui apenas {self._quantidade} ações."
-            )
 
         self._quantidade -= quantidade
 
         if self._quantidade == 0:
             self._preco_medio = Decimal("0")
+
+    def verifica_se_pode_remover_acao(self, quantidade: int) -> dict | None:
+        """Verifica se é possível remover uma quantidade de ações do investimento."""
+        if quantidade <= 0:
+            return "Quantidade deve ser maior que zero"
+
+        if quantidade > self._quantidade:
+            return "Can't sell more stocks than you have"

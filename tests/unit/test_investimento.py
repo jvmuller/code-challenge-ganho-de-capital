@@ -74,12 +74,12 @@ class TestInvestimento:
         with pytest.raises(ValueError, match="Quantidade deve ser maior que zero"):
             investimento.remover_acao(-5)
 
-    def test_remover_acao_maior_que_disponivel(self):
-        """Testa a remoção de ações em quantidade maior que a disponível."""
-        investimento = Investimento()
-        investimento.adicionar_acao(10, Decimal("20"))
+    # def test_remover_acao_maior_que_disponivel(self):
+    #     """Testa a remoção de ações em quantidade maior que a disponível."""
+    #     investimento = Investimento()
+    #     investimento.adicionar_acao(10, Decimal("20"))
 
-        with pytest.raises(
-            ValueError, match="Não é possível remover 15 ações. O investimento possui apenas 10 ações."
-        ):
-            investimento.remover_acao(15)
+    #     with pytest.raises(
+    #         ValueError, match="Não é possível remover 15 ações. O investimento possui apenas 10 ações."
+    #     ):
+    #         investimento.remover_acao(15)

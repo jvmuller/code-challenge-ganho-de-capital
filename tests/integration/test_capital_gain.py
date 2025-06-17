@@ -268,14 +268,14 @@ def test_investimento_remover_com_valor_zero():
         investimento.remover_acao(0)
 
 
-def test_investimento_remover_mais_do_que_possui():
-    """Testa remover mais ações do que possui."""
-    investimento = Investimento()
-    investimento.adicionar_acao(10, Decimal("10"))
+# def test_investimento_remover_mais_do_que_possui():
+#     """Testa remover mais ações do que possui."""
+#     investimento = Investimento()
+#     investimento.adicionar_acao(10, Decimal("10"))
 
-    # Deve levantar ValueError ao tentar remover mais ações do que possui
-    with pytest.raises(ValueError, match="Não é possível remover 20 ações"):
-        investimento.remover_acao(20)
+#     # Deve levantar ValueError ao tentar remover mais ações do que possui
+#     with pytest.raises(ValueError, match="Não é possível remover 20 ações"):
+#         investimento.remover_acao(20)
 
 
 def test_main_com_erro_de_processamento():
@@ -285,3 +285,25 @@ def test_main_com_erro_de_processamento():
     with patch("sys.stdin", io.StringIO(input_data)), patch("sys.stdout", io.StringIO()):
         with pytest.raises(SystemExit):
             main()  # Deve levantar SystemExit com a mensagem de erro
+
+
+@pytest.mark.parametrize(
+    "input_file,expected_output",
+    [
+        (
+            """[{"operation":"buy", "unit-cost":10, "quantity": 10000}, {"operation":"sell", "unit-cost":20, "quantity": 11000}]""",
+            '[{"tax": 0.0},{"error": "Can\'t sell more stocks than you have"}]\n',
+        ),
+        (
+            """[{"operation":"buy", "unit-cost": 10, "quantity": 10000}, {"operation":"sell", "unit-cost": 20, "quantity": 5000}, {"operation":"sell", "unit-cost":20, "quantity": 11000}, {"operation":"sell", "unit-cost": 20, "quantity": 5000}]""",
+            '[{"tax": 0.0},{"tax": 10000.0},{"error": "Can\'t sell more stocks than you have"},{"tax": 10000.0}]\n',
+        ),
+    ],
+)
+def test_main_quando_venda_acoes_que_nao_possui(input_file, expected_output):
+    output_data = io.StringIO()
+
+    with patch("sys.stdin", io.StringIO(input_file)), patch("sys.stdout", output_data):
+        main()
+
+    assert output_data.getvalue() == expected_output

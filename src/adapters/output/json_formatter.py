@@ -21,5 +21,5 @@ class JsonFormatter(ImpostosOutputPort):
     @staticmethod
     def formatar_impostos(impostos: List[Decimal]) -> str:
         """Formata lista de impostos como JSON."""
-        result = [{"tax": imposto} for imposto in impostos]
+        result = [{"error": imposto} if isinstance(imposto, str) else {"tax": imposto} for imposto in impostos]
         return json.dumps(result, cls=DecimalEncoder, separators=(",", ": "))

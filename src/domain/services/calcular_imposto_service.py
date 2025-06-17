@@ -23,6 +23,10 @@ class CalcularImpostoService(CalcularImpostoServicePort):
                 investimento.adicionar_acao(operacao.quantidade, operacao.preco_unitario)
                 impostos.append(Decimal("0"))
             else:
+                if resultado_verificacao := investimento.verifica_se_pode_remover_acao(operacao.quantidade):
+                    impostos.append(resultado_verificacao)
+                    continue
+
                 lucro_ou_prejuizo = self._calcular_lucro_ou_prejuizo(investimento, operacao)
                 imposto = self._calcular_imposto(lucro_ou_prejuizo, prejuizo_acumulado, operacao.valor_total)
 
